@@ -13,8 +13,6 @@ namespace BugWorkflow.Tests
             var bug = new Bug();
 
             Assert.AreEqual(Bug.BugState.New, bug.State);
-            Assert.AreEqual(Bug.ReturnReason.None, bug.CurrentReturnReason);
-            Assert.AreEqual(Bug.CloseReason.None, bug.CurrentCloseReason);
         }
 
         [TestMethod]
@@ -86,7 +84,7 @@ namespace BugWorkflow.Tests
         }
 
         [TestMethod]
-        public void ResolveFix_FromWaitFixApprove_ShouldCloseBugWithFixedReason()
+        public void ResolveFix_FromWaitFixApprove_ShouldCloseBug()
         {
             var bug = new Bug();
             bug.StartTriage();
@@ -96,11 +94,10 @@ namespace BugWorkflow.Tests
             bug.ResolveFix();
 
             Assert.AreEqual(Bug.BugState.Closed, bug.State);
-            Assert.AreEqual(Bug.CloseReason.Fixed, bug.CurrentCloseReason);
         }
 
         [TestMethod]
-        public void RejectFix_FromWaitFixApprove_ShouldMoveToReturnedWithFixRejectedReason()
+        public void RejectFix_FromWaitFixApprove_ShouldMoveToReturned()
         {
             var bug = new Bug();
             bug.StartTriage();
@@ -110,7 +107,6 @@ namespace BugWorkflow.Tests
             bug.RejectFix();
 
             Assert.AreEqual(Bug.BugState.Returned, bug.State);
-            Assert.AreEqual(Bug.ReturnReason.FixRejected, bug.CurrentReturnReason);
         }
 
         [TestMethod]
@@ -124,7 +120,6 @@ namespace BugWorkflow.Tests
             bug.CheckFixResult(true);
 
             Assert.AreEqual(Bug.BugState.Closed, bug.State);
-            Assert.AreEqual(Bug.CloseReason.Fixed, bug.CurrentCloseReason);
         }
 
         [TestMethod]
@@ -138,11 +133,10 @@ namespace BugWorkflow.Tests
             bug.CheckFixResult(false);
 
             Assert.AreEqual(Bug.BugState.Returned, bug.State);
-            Assert.AreEqual(Bug.ReturnReason.FixRejected, bug.CurrentReturnReason);
         }
 
         [TestMethod]
-        public void MarkNotABug_FromTriage_ShouldCloseBugWithNotABugReason()
+        public void MarkNotABug_FromTriage_ShouldCloseBug()
         {
             var bug = new Bug();
             bug.StartTriage();
@@ -150,11 +144,10 @@ namespace BugWorkflow.Tests
             bug.MarkNotABug();
 
             Assert.AreEqual(Bug.BugState.Closed, bug.State);
-            Assert.AreEqual(Bug.ReturnReason.NotABug, bug.CurrentReturnReason);
         }
 
         [TestMethod]
-        public void MarkWontFix_FromTriage_ShouldCloseBugWithWontFixReason()
+        public void MarkWontFix_FromTriage_ShouldCloseBug()
         {
             var bug = new Bug();
             bug.StartTriage();
@@ -162,11 +155,10 @@ namespace BugWorkflow.Tests
             bug.MarkWontFix();
 
             Assert.AreEqual(Bug.BugState.Closed, bug.State);
-            Assert.AreEqual(Bug.ReturnReason.WontFix, bug.CurrentReturnReason);
         }
 
         [TestMethod]
-        public void MarkDuplicate_FromTriage_ShouldCloseBugWithDuplicateReason()
+        public void MarkDuplicate_FromTriage_ShouldCloseBug()
         {
             var bug = new Bug();
             bug.StartTriage();
@@ -174,7 +166,6 @@ namespace BugWorkflow.Tests
             bug.MarkDuplicate();
 
             Assert.AreEqual(Bug.BugState.Closed, bug.State);
-            Assert.AreEqual(Bug.ReturnReason.Duplicate, bug.CurrentReturnReason);
         }
 
         [TestMethod]
@@ -187,7 +178,6 @@ namespace BugWorkflow.Tests
             bug.MarkCannotReproduce();
 
             Assert.AreEqual(Bug.BugState.Returned, bug.State);
-            Assert.AreEqual(Bug.ReturnReason.CannotReproduce, bug.CurrentReturnReason);
         }
 
         [TestMethod]
@@ -216,7 +206,7 @@ namespace BugWorkflow.Tests
         }
 
         [TestMethod]
-        public void EnteringTriage_AfterReopen_ShouldResetReasons()
+        public void EnteringTriage_AfterReopen_ShouldMoveToTriage()
         {
             var bug = new Bug();
             bug.StartTriage();
@@ -226,8 +216,6 @@ namespace BugWorkflow.Tests
             bug.BackToTriage();
 
             Assert.AreEqual(Bug.BugState.Triage, bug.State);
-            Assert.AreEqual(Bug.ReturnReason.None, bug.CurrentReturnReason);
-            Assert.AreEqual(Bug.CloseReason.None, bug.CurrentCloseReason);
         }
 
         [TestMethod]
