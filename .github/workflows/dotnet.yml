@@ -1,23 +1,30 @@
-name: .NET
+name: .NET CI
 
-
-on: [push, pull_request]
-
+on:
+  push:
+  pull_request:
 
 jobs:
- build:
-
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '9.x'
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+          cache: true
+          cache-dependency-path: |
+            **/*.csproj
+
+      - name: Restore
+        run: dotnet restore ST-4.sln
+
+      - name: Build
+        run: dotnet build ST-4.sln --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test BugTests/BugTests.csproj --configuration Release --no-build --verbosity normal

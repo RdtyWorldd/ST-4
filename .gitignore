@@ -1,0 +1,19 @@
+# Build artifacts
+bin/
+obj/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+
+# IDE directories
+.vs/
+.vscode/
+.idea/
+
+# Test results
+TestResults/
+
+# OS files
+.DS_Store
